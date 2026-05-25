@@ -1,0 +1,58 @@
+/* Estilos básicos para "Mi Primera Web" - Sistema de Gestión de Calidad */
+:root{
+	--bg:#f5f7fb;
+	--card:#ffffff;
+	--accent:#0b5ed7;
+	--text:#1f2937;
+	--muted:#6b7280;
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{
+	font-family:Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+	background:var(--bg);
+	color:var(--text);
+	line-height:1.5;
+	-webkit-font-smoothing:antialiased;
+}
+
+header{
+	background:linear-gradient(90deg,var(--accent),#0069c0);
+	color:#fff;
+	padding:2rem 1rem;
+	text-align:center;
+}
+header h1{font-size:1.5rem}
+
+nav{
+	display:flex;gap:0.5rem;justify-content:center;flex-wrap:wrap;
+	background:transparent;padding:0.75rem 1rem;border-bottom:1px solid rgba(31,41,55,0.06);
+}
+nav a{
+	text-decoration:none;color:var(--accent);padding:0.5rem 0.75rem;border-radius:6px;font-weight:600;
+}
+nav a:hover{background:rgba(11,94,215,0.08)}
+
+main,section{max-width:900px;margin:1.25rem auto;padding:0 1rem}
+
+section{
+	background:var(--card);border-radius:10px;padding:1rem 1.25rem;margin:0.75rem 1rem;box-shadow:0 6px 18px rgba(15,23,42,0.06);
+}
+section h2{color:var(--accent);margin-bottom:0.5rem;font-size:1.125rem}
+section p{color:var(--muted)}
+
+@media (min-width:900px){
+	header h1{font-size:2rem}
+	nav{justify-content:flex-start;padding:1rem 3rem}
+	nav a{margin-right:0.5rem}
+	main,section{max-width:1000px;margin-left:auto;margin-right:auto}
+}
+
+/* Small utility classes */
+.muted{color:var(--muted)}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);border:0}
+
+/* Footer spacing if added */
+footer{padding:1.25rem;text-align:center;color:var(--muted)}
+
