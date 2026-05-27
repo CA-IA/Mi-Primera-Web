@@ -1,37 +1,55 @@
-document.addEventListener('DOMContentLoaded', function () {
-    const navLinks = document.querySelectorAll('nav a');
+console.log("Web cargada correctamente");
 
-    function setActiveLink() {
-        const fromTop = window.scrollY + 100;
+const ctx = document.getElementById('isoChart');
 
-        navLinks.forEach(link => {
-            const section = document.querySelector(link.hash);
-            if (!section) return;
+new Chart(ctx, {
+    type: 'line',
 
-            const top = section.offsetTop;
-            const bottom = top + section.offsetHeight;
+    data: {
 
-            if (fromTop >= top && fromTop < bottom) {
-                link.classList.add('active');
-            } else {
-                link.classList.remove('active');
+        labels: [
+            '1995',
+            '2000',
+            '2005',
+            '2010',
+            '2015',
+            '2020',
+            '2025'
+        ],
+
+        datasets: [{
+
+            label: 'Certificaciones ISO 9001 en España',
+
+            data: [
+                5000,
+                18000,
+                42000,
+                62000,
+                58000,
+                52000,
+                50000
+            ],
+
+            borderWidth: 4,
+            tension: 0.4
+
+        }]
+    },
+
+    options: {
+
+        responsive: true,
+
+        plugins: {
+
+            legend: {
+                labels: {
+                    font: {
+                        size: 14
+                    }
+                }
             }
-        });
+        }
     }
-
-    navLinks.forEach(link => {
-        link.addEventListener('click', function (event) {
-            event.preventDefault();
-            const target = document.querySelector(this.hash);
-            if (target) {
-                window.scrollTo({
-                    top: target.offsetTop,
-                    behavior: 'smooth'
-                });
-            }
-        });
-    });
-
-    window.addEventListener('scroll', setActiveLink);
-    setActiveLink();
 });
