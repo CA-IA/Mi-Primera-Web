@@ -225,3 +225,31 @@ footer{
     color:#1d4ed8;
     margin-bottom:15px;
 }
+
+.resultado-box{
+    background:white;
+    color:#1e293b;
+    padding:30px;
+    border-radius:20px;
+    margin-top:30px;
+}
+
+.resultado-box h3{
+    color:#2563eb;
+    margin-bottom:20px;
+}
+
+#resumenTexto{
+    line-height:1.9;
+    font-size:1rem;
+}
+
+#mapaConceptual{
+    margin-top:20px;
+    font-family:monospace;
+    white-space:pre-line;
+    line-height:1.8;
+    background:#f4f7fb;
+    padding:20px;
+    border-radius:10px;
+}
