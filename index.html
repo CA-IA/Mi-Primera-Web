@@ -124,21 +124,36 @@
 
 	<section class="section dark-section">
 
-		<div class="dark-content">
+    <div class="dark-content">
 
-			<h2>
-				IA aplicada a calidad
-			</h2>
+        <h2>
+            IA aplicada a calidad
+        </h2>
 
-			<p>
-				Introduce un documento con una norma
-				y la plataforma generará automáticamente
-				un esquema con los puntos esenciales.
-			</p>
+        <p>
+            Introduce una norma ISO y genera
+            automáticamente un resumen y un mapa conceptual.
+        </p>
 
-		</div>
+        <div class="ia-generator">
 
-	</section>
+            <input 
+                type="text"
+                id="normaInput"
+                placeholder="Ejemplo: ISO 9001"
+            >
+
+            <button onclick="generarResumen()">
+                Generar resumen
+            </button>
+
+        </div>
+
+        <div id="resultadoIA"></div>
+
+    </div>
+
+</section>
 
 	<!-- CONSULTORIAS -->
 

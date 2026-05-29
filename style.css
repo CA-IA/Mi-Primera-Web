@@ -178,3 +178,50 @@ footer{
     }
 
 }
+
+.ia-generator{
+    margin-top:40px;
+    display:flex;
+    gap:15px;
+    justify-content:center;
+    flex-wrap:wrap;
+}
+
+.ia-generator input{
+    padding:15px;
+    width:300px;
+    border:none;
+    border-radius:10px;
+    font-size:1rem;
+}
+
+.ia-generator button{
+    padding:15px 25px;
+    border:none;
+    border-radius:10px;
+    background:#2563eb;
+    color:white;
+    font-weight:600;
+    cursor:pointer;
+    transition:0.3s;
+}
+
+.ia-generator button:hover{
+    background:#1d4ed8;
+    transform:translateY(-2px);
+}
+
+#resultadoIA{
+    margin-top:40px;
+    background:white;
+    color:#1e293b;
+    padding:30px;
+    border-radius:20px;
+    text-align:left;
+    line-height:1.8;
+}
+
+#resultadoIA h3{
+    color:#1d4ed8;
+    margin-bottom:15px;
+}
