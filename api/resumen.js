@@ -2,7 +2,7 @@ export default async function handler(req, res) {
 
     try {
 
-        if(req.method !== "POST"){
+        if (req.method !== "POST") {
 
             return res.status(405).json({
                 error: "Método no permitido"
@@ -12,7 +12,7 @@ export default async function handler(req, res) {
 
         const { norma } = req.body;
 
-        if(!norma){
+        if (!norma) {
 
             return res.status(400).json({
                 error: "Norma no recibida"
@@ -20,77 +20,51 @@ export default async function handler(req, res) {
 
         }
 
+        const prompt = `
+Eres experto en normas ISO, sistemas de gestión,
+calidad, medioambiente y auditorías.
+
+Genera un resumen técnico de aproximadamente
+1000 caracteres sobre la norma ${norma}.
+
+Después genera un mapa conceptual completo
+en texto ASCII.
+
+El formato debe ser EXACTAMENTE:
+
+RESUMEN:
+texto...
+
+MAPA:
+esquema...
+`;
+
         const respuesta = await fetch(
-
-            "https://api.openai.com/v1/chat/completions",
-
+            `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${process.env.GEMINI_API_KEY}`,
             {
-
                 method: "POST",
-
                 headers: {
-
-                    "Content-Type": "application/json",
-
-                    "Authorization":
-                    `Bearer ${process.env.OPENAI_API_KEY}`
-
+                    "Content-Type": "application/json"
                 },
-
                 body: JSON.stringify({
-
-                    model: "gpt-4.1-mini",
-
-                    messages: [
-
+                    contents: [
                         {
-                            role: "system",
-
-                            content:
-                            `
-                            Eres experto en normas ISO,
-                            sistemas de gestión,
-                            calidad y auditorías.
-                            `
-                        },
-
-                        {
-                            role: "user",
-
-                            content:
-                            `
-                            Genera un resumen técnico
-                            de aproximadamente 1000 caracteres
-                            sobre la norma ${norma}.
-
-                            Después genera un mapa conceptual
-                            completo en texto ASCII.
-
-                            El formato debe ser EXACTAMENTE:
-
-                            RESUMEN:
-                            texto...
-
-                            MAPA:
-                            esquema...
-                            `
+                            parts: [
+                                {
+                                    text: prompt
+                                }
+                            ]
                         }
-
-                    ],
-
-                    temperature: 0.7
-
+                    ]
                 })
-
             }
-
         );
 
         const datos = await respuesta.json();
 
-        console.log(datos);
+        console.log(JSON.stringify(datos, null, 2));
 
-        if(datos.error){
+        if (datos.error) {
 
             return res.status(500).json({
                 error: datos.error.message
@@ -99,15 +73,22 @@ export default async function handler(req, res) {
         }
 
         const texto =
-            datos.choices[0].message.content;
+            datos.candidates?.[0]?.content?.parts?.[0]?.text;
+
+        if (!texto) {
+
+            return res.status(500).json({
+                error: "Gemini no devolvió contenido"
+            });
+
+        }
 
         return res.status(200).json({
             resultado: texto
         });
 
     }
-
-    catch(error){
+    catch (error) {
 
         console.error(error);
 
