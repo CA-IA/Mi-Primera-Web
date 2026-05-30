@@ -27,16 +27,31 @@ calidad, medioambiente y auditorías.
 Genera un resumen técnico de aproximadamente
 1000 caracteres sobre la norma ${norma}.
 
-Después genera un mapa conceptual completo
-en texto ASCII.
+El resumen debe destacar:
+
+- objetivo de la norma
+- requisitos principales
+- beneficios
+- apartados más relevantes
+
+Después genera un mapa conceptual
+en formato Mermaid.
+
+Debe contener:
+
+- todos los capítulos principales
+- los subapartados más importantes
+- una estructura jerárquica clara
 
 El formato debe ser EXACTAMENTE:
 
 RESUMEN:
 texto...
 
-MAPA:
-esquema...
+MERMAID:
+graph TD
+A[Norma]
+A --> B[Capítulo]
 `;
 
         const respuesta = await fetch(

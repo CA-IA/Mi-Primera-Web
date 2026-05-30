@@ -9,6 +9,9 @@ async function generarResumen(){
     const mapaConceptual =
         document.getElementById("mapaConceptual");
 
+    const mapaVisual =
+        document.getElementById("mapaVisual");
+
     if(norma === ""){
 
         resumenTexto.innerHTML =
@@ -21,13 +24,12 @@ async function generarResumen(){
         "Generando resumen con IA...";
 
     mapaConceptual.innerHTML = "";
+    mapaVisual.innerHTML = "";
 
     try{
 
         const respuesta = await fetch(
-
             "/api/resumen",
-
             {
                 method: "POST",
 
@@ -39,29 +41,42 @@ async function generarResumen(){
                     norma: norma
                 })
             }
-
         );
 
         const datos = await respuesta.json();
 
         const texto = datos.resultado;
 
-        const partes = texto.split("MAPA:");
+        const partesResumen =
+            texto.split("MERMAID:");
+
+        const resumen =
+            partesResumen[0]
+                .replace("RESUMEN:","")
+                .trim();
+
+        const mermaidCode =
+            partesResumen[1].trim();
 
         resumenTexto.innerHTML =
-            partes[0].replace("RESUMEN:", "");
+            resumen;
 
         mapaConceptual.innerHTML =
-            partes[1];
+            "Diagrama generado por IA";
+
+        mapaVisual.innerHTML =
+            `<pre class="mermaid">${mermaidCode}</pre>`;
+
+        await window.mermaid.run();
 
     }
 
     catch(error){
 
+        console.error(error);
+
         resumenTexto.innerHTML =
             "Error conectando con IA.";
-
-        console.error(error);
 
     }
 
