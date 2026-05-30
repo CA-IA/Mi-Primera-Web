@@ -69,6 +69,21 @@ async function generarResumen(){
 
         await window.mermaid.run();
 
+        const contenedor =
+            document.getElementById("mapaVisual");
+
+        contenedor.onclick = function(){
+
+        document.getElementById("modalMapa").style.display =
+            "block";
+
+        document.getElementById("mapaGrande").innerHTML =
+            `<pre class="mermaid">${mermaidCode}</pre>`;
+
+        window.mermaid.run();
+        };
+
+
     }
 
     catch(error){
@@ -79,5 +94,18 @@ async function generarResumen(){
             "Error conectando con IA.";
 
     }
+
+document.addEventListener("DOMContentLoaded", () => {
+
+    document
+        .getElementById("cerrarMapa")
+        .onclick = function(){
+
+            document
+                .getElementById("modalMapa")
+                .style.display = "none";
+        };
+
+});
 
 }

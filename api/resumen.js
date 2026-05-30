@@ -40,8 +40,14 @@ en formato Mermaid.
 Debe contener:
 
 - todos los capítulos principales
-- los subapartados más importantes
-- una estructura jerárquica clara
+- todos los subapartados relevantes
+- entre 15 y 25 nodos como mínimo
+- relaciones jerárquicas completas
+- estructura adecuada para un mapa conceptual profesional
+
+No hagas esquemas simples.
+
+El mapa debe ser detallado y útil para estudiar la norma.
 
 El formato debe ser EXACTAMENTE:
 
@@ -49,7 +55,8 @@ RESUMEN:
 texto...
 
 MERMAID:
-graph TD
+graph LR
+Utiliza graph LR para generar diagramas horizontales.
 A[Norma]
 A --> B[Capítulo]
 `;
