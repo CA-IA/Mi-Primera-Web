@@ -95,17 +95,18 @@ async function generarResumen(){
 
     }
 
-document.addEventListener("DOMContentLoaded", () => {
+window.addEventListener("load", () => {
 
-    document
-        .getElementById("cerrarMapa")
-        .onclick = function(){
+    const cerrar =
+        document.getElementById("cerrarMapa");
 
-            document
-                .getElementById("modalMapa")
-                .style.display = "none";
-        };
+    cerrar.addEventListener("click", () => {
+
+        console.log("ASPA PULSADA");
+
+        document.getElementById("modalMapa")
+            .style.display = "none";
+
+    });
 
 });
-
-}
