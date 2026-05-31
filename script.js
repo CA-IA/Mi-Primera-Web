@@ -95,15 +95,22 @@ async function generarResumen(){
 
     }
 
-document.addEventListener("DOMContentLoaded", () => {
+}
 
-    document
-        .getElementById("cerrarMapa")
-        .onclick = function(){
+window.addEventListener("load", () => {
 
-            document
-                .getElementById("modalMapa")
+    const cerrar =
+        document.getElementById("cerrarMapa");
+
+    if(cerrar){
+
+        cerrar.addEventListener("click", () => {
+
+            document.getElementById("modalMapa")
                 .style.display = "none";
-        };
+
+        });
+
+    }
 
 });
