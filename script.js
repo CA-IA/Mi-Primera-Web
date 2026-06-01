@@ -156,6 +156,40 @@ async function generarResumen(){
 
             };
 
+        document.getElementById("btnPausa").onclick =
+            function(){
+
+                if(speechSynthesis.speaking){
+
+                    if(speechSynthesis.paused){
+
+                        speechSynthesis.resume();
+
+                        this.innerHTML =
+                            "⏸ Pausar";
+
+                    }else{
+
+                        speechSynthesis.pause();
+
+                        this.innerHTML =
+                            "▶ Continuar";
+
+                    }
+
+                }
+
+            };
+
+        document.getElementById("btnStop").onclick =
+            function(){
+
+                speechSynthesis.cancel();
+
+                document.getElementById("btnPausa").innerHTML =
+                    "⏸ Pausar";
+
+            };
 
         mapaConceptual.innerHTML =
             "Diagrama generado por IA";
