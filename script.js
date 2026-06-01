@@ -48,8 +48,26 @@ async function generarResumen(){
 
         const datos = await respuesta.json();
 
+            console.log("RESPUESTA API:");
+            console.log(datos);
+
+            if(!respuesta.ok){
+
+                throw new Error(
+                    datos.error || "Error API"
+                );
+
+            }
+
         const texto = datos.resultado;
-            console.log(texto);
+
+            if(!texto){
+
+                throw new Error(
+                    "La API no devolvió resultado"
+                );
+
+            }
 
         const partesPDF =
             texto.split("PDF:");
