@@ -66,8 +66,25 @@ async function generarResumen(){
         const textoPDF =
             partesMermaid[0].trim();
 
-        const mermaidCode =
+        let mermaidCode =
             partesMermaid[1].trim();
+        
+        mermaidCode =
+            mermaidCode
+                .replace(/```mermaid/g, "")
+                .replace(/```/g, "")
+                .trim();
+
+        mermaidCode =
+            mermaidCode
+                .split("\n")
+                .filter(linea =>
+                    !linea.trim().startsWith("%")
+                )
+                .join("\n");
+
+        console.log("MERMAID LIMPIO:");
+        console.log(mermaidCode);
 
         const resumen =
             resumenYMapa

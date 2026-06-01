@@ -72,6 +72,18 @@ PDF:
 contenido desarrollado...
 
 MERMAID:
+Devuelve exclusivamente código Mermaid.
+
+No utilices:
+
+- %
+- %%
+- comentarios
+- explicaciones
+- bloques markdown
+
+Comienza directamente por:
+
 graph LR
 Utiliza graph LR para generar diagramas horizontales.
 A[Norma]
