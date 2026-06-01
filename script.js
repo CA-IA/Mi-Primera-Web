@@ -132,6 +132,9 @@ async function generarResumen(){
         resumenTexto.innerHTML =
             resumen;
         
+        document.getElementById("zonaDocumento")
+            .style.display = "block";
+                
         pdfContainer.style.display =
             "block";
 
@@ -267,6 +270,18 @@ async function generarResumen(){
 
 window.addEventListener("load", () => {
 
+    const btnDocumento =
+        document.getElementById(
+            "btnGenerarDocumento"
+        );
+
+    if(btnDocumento){
+
+        btnDocumento.onclick =
+            generarDocumento;
+
+    }
+
     const cerrar =
         document.getElementById("cerrarMapa");
 
@@ -282,3 +297,45 @@ window.addEventListener("load", () => {
     }
 
 });
+
+async function generarDocumento(){
+
+    const norma =
+        document.getElementById("normaInput").value;
+
+    const boton =
+        document.getElementById("btnGenerarDocumento");
+
+    boton.innerHTML =
+        "Generando documento...";
+
+    const respuesta = await fetch(
+        "/api/documento",
+        {
+            method:"POST",
+
+            headers:{
+                "Content-Type":"application/json"
+            },
+
+            body:JSON.stringify({
+                norma:norma
+            })
+        }
+    );
+
+    const datos =
+        await respuesta.json();
+
+    const textoPDF =
+        datos.documento;
+
+    window.documentoCompleto =
+        textoPDF;
+
+    boton.innerHTML =
+        "✅ Documento generado";
+
+    pdfContainer.style.display =
+        "block";
+}
