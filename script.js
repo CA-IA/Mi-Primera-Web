@@ -49,6 +49,7 @@ async function generarResumen(){
         const datos = await respuesta.json();
 
         const texto = datos.resultado;
+            console.log(texto);
 
         const partesPDF =
             texto.split("PDF:");
