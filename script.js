@@ -259,7 +259,7 @@ async function generarResumen(){
         console.error(error);
 
         resumenTexto.innerHTML =
-            "Error conectando con IA.";
+            error.message;
 
     }
 
