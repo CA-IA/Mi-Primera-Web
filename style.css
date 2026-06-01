@@ -326,3 +326,23 @@ footer{
     background:#15803d;
 
 }
+
+.audio-button{
+
+    background:#ea580c;
+    color:white;
+    border:none;
+    padding:15px 25px;
+    border-radius:10px;
+    cursor:pointer;
+    font-size:1rem;
+    font-weight:600;
+    margin-left:10px;
+
+}
+
+.audio-button:hover{
+
+    background:#c2410c;
+
+}

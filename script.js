@@ -136,6 +136,27 @@ async function generarResumen(){
 
             };
 
+        document.getElementById("btnAudio").onclick =
+            function(){
+
+                speechSynthesis.cancel();
+
+                const lectura =
+                    new SpeechSynthesisUtterance(
+                        textoPDF
+                    );
+
+                lectura.lang = "es-ES";
+
+                lectura.rate = 1;
+
+                speechSynthesis.speak(
+                    lectura
+                );
+
+            };
+
+
         mapaConceptual.innerHTML =
             "Diagrama generado por IA";
 
