@@ -53,6 +53,16 @@ async function generarResumen(){
 
         const partesPDF =
             texto.split("PDF:");
+        
+        if(partesPDF.length < 2){
+
+            resumenTexto.innerHTML =
+                "La IA devolvió una respuesta incompleta. Vuelve a intentarlo.";
+
+            console.error(texto);
+
+            return;
+        }
 
         const resumenYMapa =
             partesPDF[0];
@@ -62,6 +72,16 @@ async function generarResumen(){
 
         const partesMermaid =
             pdfYMermaid.split("MERMAID:");
+        
+        if(partesMermaid.length < 2){
+
+            resumenTexto.innerHTML =
+                "La IA no generó el mapa conceptual.";
+
+            console.error(texto);
+
+            return;
+        }
 
         const textoPDF =
             partesMermaid[0].trim();
