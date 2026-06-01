@@ -49,10 +49,27 @@ No hagas esquemas simples.
 
 El mapa debe ser detallado y útil para estudiar la norma.
 
+Después del resumen genera un apartado PDF.
+
+Debe contener:
+
+- introducción
+- objeto y alcance
+- requisitos principales
+- explicación detallada de cada capítulo
+- ejemplos prácticos
+- beneficios
+- conclusiones
+
+Debe tener entre 3000 y 5000 palabras.
+
 El formato debe ser EXACTAMENTE:
 
 RESUMEN:
 texto...
+
+PDF:
+contenido desarrollado...
 
 MERMAID:
 graph LR

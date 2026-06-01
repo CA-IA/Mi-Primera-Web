@@ -5,6 +5,9 @@ async function generarResumen(){
 
     const resumenTexto =
         document.getElementById("resumenTexto");
+    
+    const pdfContainer =
+        document.getElementById("pdfContainer");
 
     const mapaConceptual =
         document.getElementById("mapaConceptual");
@@ -47,19 +50,73 @@ async function generarResumen(){
 
         const texto = datos.resultado;
 
-        const partesResumen =
-            texto.split("MERMAID:");
+        const partesPDF =
+            texto.split("PDF:");
+
+        const resumenYMapa =
+            partesPDF[0];
+
+        const pdfYMermaid =
+            partesPDF[1];
+
+        const partesMermaid =
+            pdfYMermaid.split("MERMAID:");
+
+        const textoPDF =
+            partesMermaid[0].trim();
+
+        const mermaidCode =
+            partesMermaid[1].trim();
 
         const resumen =
-            partesResumen[0]
+            resumenYMapa
                 .replace("RESUMEN:","")
                 .trim();
 
-        const mermaidCode =
-            partesResumen[1].trim();
-
         resumenTexto.innerHTML =
             resumen;
+        
+        pdfContainer.style.display =
+            "block";
+
+        document.getElementById("btnPDF").onclick =
+            function(){
+
+                const { jsPDF } = window.jspdf;
+
+                const pdf =
+                    new jsPDF();
+
+                const lineas =
+                    pdf.splitTextToSize(
+                        textoPDF,
+                        180
+                    );
+
+                let y = 20;
+
+                lineas.forEach(linea => {
+
+                    if(y > 270){
+
+                        pdf.addPage();
+                        y = 20;
+
+                    }
+
+                    pdf.text(
+                        linea,
+                        15,
+                        y
+                    );
+
+                    y += 7;
+
+                });
+
+                pdf.output("dataurlnewwindow");
+
+            };
 
         mapaConceptual.innerHTML =
             "Diagrama generado por IA";
