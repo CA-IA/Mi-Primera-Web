@@ -130,7 +130,7 @@ async function generarResumen(){
 
                 const lineas =
                     pdf.splitTextToSize(
-                        textoPDF,
+                        window.documentoCompleto,
                         180
                     );
 
@@ -162,11 +162,20 @@ async function generarResumen(){
         document.getElementById("btnAudio").onclick =
             function(){
 
+                if(!window.documentoCompleto){
+
+                    alert(
+                        "Primero debes generar el documento completo."
+                    );
+
+                    return;
+                }
+
                 speechSynthesis.cancel();
 
                 const lectura =
                     new SpeechSynthesisUtterance(
-                        textoPDF
+                        window.documentoCompleto
                     );
 
                 lectura.lang = "es-ES";
@@ -318,6 +327,6 @@ async function generarDocumento(){
     boton.innerHTML =
         "✅ Documento generado";
 
-    pdfContainer.style.display =
-        "block";
+    document.getElementById("pdfContainer")
+        .style.display = "block";
 }
