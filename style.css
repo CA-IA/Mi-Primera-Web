@@ -308,41 +308,42 @@ footer{
     cursor:pointer;
 }
 
-.pdf-button{
+.documento-botones{
 
-    background:#16a34a;
-    color:white;
-    border:none;
+    margin-top:20px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+
+}
+
+.documento-botones button{
+
     padding:15px 25px;
-    border-radius:10px;
-    cursor:pointer;
-    font-size:1rem;
-    font-weight:600;
-
-}
-
-.pdf-button:hover{
-
-    background:#15803d;
-
-}
-
-.audio-button{
-
-    background:#ea580c;
-    color:white;
     border:none;
-    padding:15px 25px;
     border-radius:10px;
-    cursor:pointer;
-    font-size:1rem;
+    background:#2563eb;
+    color:white;
     font-weight:600;
-    margin-left:10px;
+    font-size:1rem;
+    cursor:pointer;
+    transition:0.3s;
+    min-width:280px;
+    margin-bottom:12px;
 
 }
 
-.audio-button:hover{
+.documento-botones button:hover{
 
-    background:#c2410c;
+    background:#1d4ed8;
+    transform:translateY(-2px);
+
+}
+
+.controles-audio{
+
+    display:flex;
+    gap:15px;
+    margin-top:15px;
 
 }
