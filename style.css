@@ -347,3 +347,25 @@ footer{
     margin-top:15px;
 
 }
+
+#btnGenerarDocumento{
+
+    padding:15px 25px;
+    border:none;
+    border-radius:10px;
+    background:#2563eb;
+    color:white;
+    font-weight:600;
+    font-size:1rem;
+    cursor:pointer;
+    transition:0.3s;
+    min-width:280px;
+
+}
+
+#btnGenerarDocumento:hover{
+
+    background:#1d4ed8;
+    transform:translateY(-2px);
+
+}
