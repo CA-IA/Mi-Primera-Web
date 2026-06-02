@@ -69,28 +69,9 @@ async function generarResumen(){
 
             }
 
-        const partesPDF =
-            texto.split("PDF:");
-        
-        if(partesPDF.length < 2){
-
-            resumenTexto.innerHTML =
-                "La IA devolvió una respuesta incompleta. Vuelve a intentarlo.";
-
-            console.error(texto);
-
-            return;
-        }
-
-        const resumenYMapa =
-            partesPDF[0];
-
-        const pdfYMermaid =
-            partesPDF[1];
-
         const partesMermaid =
-            pdfYMermaid.split("MERMAID:");
-        
+            texto.split("MERMAID:");
+
         if(partesMermaid.length < 2){
 
             resumenTexto.innerHTML =
@@ -101,8 +82,10 @@ async function generarResumen(){
             return;
         }
 
-        const textoPDF =
-            partesMermaid[0].trim();
+        const resumen =
+            partesMermaid[0]
+                .replace("RESUMEN:","")
+                .trim();
 
         let mermaidCode =
             partesMermaid[1].trim();
@@ -124,17 +107,16 @@ async function generarResumen(){
         console.log("MERMAID LIMPIO:");
         console.log(mermaidCode);
 
-        const resumen =
-            resumenYMapa
-                .replace("RESUMEN:","")
-                .trim();
-
+        
         resumenTexto.innerHTML =
             resumen;
         
         document.getElementById("zonaDocumento")
             .style.display = "block";
                 
+        const pdfContainer =
+            document.getElementById("pdfContainer");
+
         pdfContainer.style.display =
             "block";
 
