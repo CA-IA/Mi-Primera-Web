@@ -128,20 +128,93 @@ async function generarResumen(){
                 const pdf =
                     new jsPDF();
 
+                const fecha =
+                    new Date().toLocaleDateString("es-ES");
+
+                /*
+                PORTADA
+                */
+
+                pdf.setFontSize(26);
+                pdf.setTextColor(29,78,216);
+
+                pdf.text(
+                    norma,
+                    105,
+                    50,
+                    { align:"center" }
+                );
+
+                pdf.setFontSize(18);
+
+                pdf.text(
+                    "Guía completa de estudio",
+                    105,
+                    70,
+                    { align:"center" }
+                );
+
+                pdf.setFontSize(12);
+
+                pdf.setTextColor(80);
+
+                pdf.text(
+                    "Generado por IA para QA",
+                    105,
+                    90,
+                    { align:"center" }
+                );
+
+                pdf.text(
+                    fecha,
+                    105,
+                    100,
+                    { align:"center" }
+                );
+
+                /*
+                NUEVA PÁGINA
+                */
+
+                pdf.addPage();
+
+                /*
+                DOCUMENTO
+                */
+
+                pdf.setTextColor(0);
+
+                pdf.setFontSize(12);
+
                 const lineas =
                     pdf.splitTextToSize(
-                        window.documentoCompleto,
+                        textoPDF,
                         180
                     );
 
                 let y = 20;
 
+                let pagina = 2;
+
                 lineas.forEach(linea => {
 
                     if(y > 270){
 
+                        pdf.setFontSize(10);
+
+                        pdf.text(
+                            `Página ${pagina}`,
+                            180,
+                            290
+                        );
+
                         pdf.addPage();
+
+                        pagina++;
+
                         y = 20;
+
+                        pdf.setFontSize(12);
 
                     }
 
@@ -154,6 +227,14 @@ async function generarResumen(){
                     y += 7;
 
                 });
+
+                pdf.setFontSize(10);
+
+                pdf.text(
+                    `Página ${pagina}`,
+                    180,
+                    290
+                );
 
                 pdf.output("dataurlnewwindow");
 
