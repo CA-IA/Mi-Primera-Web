@@ -188,7 +188,7 @@ async function generarResumen(){
 
                 const lineas =
                     pdf.splitTextToSize(
-                        textoPDF,
+                        window.documentoCompleto,
                         180
                     );
 
