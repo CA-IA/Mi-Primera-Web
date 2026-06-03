@@ -29,6 +29,7 @@ async function generarResumen(){
         "Generando resumen con IA...";
 
     datosEvaluacion = null;
+    window.documentoCompleto = "";
     reiniciarCuestionario();
 
     mapaConceptual.innerHTML = "";
@@ -119,7 +120,8 @@ async function generarResumen(){
         datosEvaluacion = {
             norma: norma,
             resumen: resumen,
-            mermaid: mermaidCode
+            mermaid: mermaidCode,
+            documento: ""
         };
 
         reiniciarCuestionario();
@@ -454,6 +456,13 @@ async function generarDocumento(){
     window.documentoCompleto =
         textoPDF;
 
+    if(datosEvaluacion){
+
+        datosEvaluacion.documento =
+            textoPDF;
+
+    }
+
     boton.innerHTML =
         "✅ Documento generado";
 
@@ -490,6 +499,20 @@ function mostrarCuestionario(){
 
     }
 
+    if(!window.documentoCompleto){
+
+        contenedor.innerHTML =
+            `<div class="aviso-cuestionario">
+                Para crear un cuestionario mas avanzado, pulsa primero "Generar documento completo".
+            </div>`;
+
+        return;
+
+    }
+
+    datosEvaluacion.documento =
+        window.documentoCompleto;
+
     const preguntas =
         crearPreguntasCuestionario(
             datosEvaluacion
@@ -516,6 +539,38 @@ function crearPreguntasCuestionario(datos){
 
     const norma =
         datos.norma.trim();
+
+    const documento =
+        limpiarTexto(
+            datos.documento || ""
+        );
+
+    const sentenciasDocumento =
+        extraerSentenciasDocumento(
+            documento
+        );
+
+    const terminosClave =
+        extraerTerminosClave(
+            documento,
+            norma
+        );
+
+    const preguntasDocumento =
+        crearPreguntasDesdeDocumento(
+            sentenciasDocumento,
+            terminosClave
+        );
+
+    if(preguntasDocumento.length >= 10){
+
+        return preguntasDocumento
+            .slice(0, 10)
+            .map(pregunta =>
+                mezclarOpciones(pregunta)
+            );
+
+    }
 
     const resumen =
         limpiarTexto(
@@ -664,6 +719,197 @@ function crearPreguntasCuestionario(datos){
     return preguntasBase.map(pregunta =>
         mezclarOpciones(pregunta)
     );
+
+}
+
+function crearPreguntasDesdeDocumento(sentencias, terminos){
+
+    const preguntas = [];
+    const usados = new Set();
+
+    sentencias.forEach(sentencia => {
+
+        if(preguntas.length >= 10){
+
+            return;
+
+        }
+
+        const termino =
+            terminos.find(candidato =>
+                !usados.has(candidato.toLowerCase()) &&
+                contieneTermino(sentencia, candidato)
+            );
+
+        if(!termino){
+
+            return;
+
+        }
+
+        const distractores =
+            terminos
+                .filter(candidato =>
+                    candidato.toLowerCase() !== termino.toLowerCase()
+                )
+                .slice(0, 18);
+
+        if(distractores.length < 3){
+
+            return;
+
+        }
+
+        usados.add(
+            termino.toLowerCase()
+        );
+
+        preguntas.push({
+            enunciado:
+                `Completa la idea extraida del documento completo: "${ocultarTermino(sentencia, termino)}"`,
+            opciones:[
+                termino,
+                distractores[0],
+                distractores[1],
+                distractores[2]
+            ],
+            correcta:0,
+            explicacion:
+                `En el documento completo aparece esta idea: "${sentencia}".`
+        });
+
+    });
+
+    return preguntas;
+
+}
+
+function extraerSentenciasDocumento(texto){
+
+    return texto
+        .replace(/\n+/g, ". ")
+        .split(/[.!?]\s+/)
+        .map(sentencia =>
+            limpiarTexto(sentencia)
+        )
+        .filter(sentencia =>
+            sentencia.length >= 80 &&
+            sentencia.length <= 260 &&
+            sentencia.split(" ").length >= 10
+        )
+        .slice(0, 80);
+
+}
+
+function extraerTerminosClave(texto, norma){
+
+    const palabrasVacias = new Set([
+        "ademas",
+        "aunque",
+        "calidad",
+        "capitulo",
+        "completo",
+        "contexto",
+        "cuando",
+        "cuenta",
+        "cumplir",
+        "dentro",
+        "deben",
+        "desde",
+        "documento",
+        "ejemplo",
+        "entre",
+        "forma",
+        "frente",
+        "gestion",
+        "hacia",
+        "incluye",
+        "manera",
+        "medioambiente",
+        "mejor",
+        "norma",
+        "normas",
+        "organizacion",
+        "organizaciones",
+        "parte",
+        "permite",
+        "puede",
+        "pueden",
+        "requiere",
+        "sistema",
+        "sobre",
+        "tambien",
+        "tener",
+        "todos",
+        "traves"
+    ]);
+
+    norma
+        .toLowerCase()
+        .split(/\s+/)
+        .forEach(palabra =>
+            palabrasVacias.add(
+                palabra
+            )
+        );
+
+    const conteo = {};
+
+    texto
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .match(/\b[a-z0-9]{7,}\b/g)
+        ?.forEach(palabra => {
+
+            if(palabrasVacias.has(palabra)){
+
+                return;
+
+            }
+
+            conteo[palabra] =
+                (conteo[palabra] || 0) + 1;
+
+        });
+
+    return Object.entries(conteo)
+        .sort((a, b) =>
+            b[1] - a[1] || b[0].length - a[0].length
+        )
+        .map(([palabra]) =>
+            palabra
+        )
+        .slice(0, 30);
+
+}
+
+function contieneTermino(sentencia, termino){
+
+    const expresion =
+        new RegExp(
+            `\\b${escaparRegExp(termino)}\\b`,
+            "i"
+        );
+
+    return expresion.test(
+        sentencia.normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+    );
+
+}
+
+function ocultarTermino(sentencia, termino){
+
+    const expresion =
+        new RegExp(
+            `\\b${escaparRegExp(termino)}\\b`,
+            "i"
+        );
+
+    return sentencia
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(expresion, "____");
 
 }
 
@@ -829,6 +1075,13 @@ function limpiarTexto(texto){
     return texto
         .replace(/\s+/g, " ")
         .trim();
+
+}
+
+function escaparRegExp(texto){
+
+    return String(texto)
+        .replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
 }
 
