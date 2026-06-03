@@ -189,7 +189,7 @@ async function generarResumen(){
                 );
 
                 pdf.text(
-                    nombreNorma,
+                    norma,
                     150,
                     10
                 );
