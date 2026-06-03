@@ -369,3 +369,155 @@ footer{
     transform:translateY(-2px);
 
 }
+
+.btn-evaluacion{
+
+    margin-top:25px;
+    padding:15px 25px;
+    border:none;
+    border-radius:10px;
+    background:#2563eb;
+    color:white;
+    font-weight:600;
+    font-size:1rem;
+    cursor:pointer;
+    transition:0.3s;
+
+}
+
+.btn-evaluacion:hover{
+
+    background:#1d4ed8;
+    transform:translateY(-2px);
+
+}
+
+#cuestionarioContainer{
+
+    margin-top:30px;
+    text-align:left;
+
+}
+
+.cuestionario{
+
+    display:grid;
+    gap:22px;
+
+}
+
+.pregunta-test{
+
+    border:1px solid #dbe4f0;
+    border-radius:14px;
+    padding:22px;
+    background:#f8fafc;
+
+}
+
+.pregunta-test legend{
+
+    padding:0 8px;
+    color:#1e3a8a;
+    font-weight:600;
+    line-height:1.5;
+
+}
+
+.opcion-test{
+
+    display:flex;
+    gap:12px;
+    align-items:flex-start;
+    margin-top:14px;
+    padding:12px;
+    border:1px solid #e2e8f0;
+    border-radius:10px;
+    background:white;
+    cursor:pointer;
+
+}
+
+.opcion-test input{
+
+    margin-top:4px;
+    flex:0 0 auto;
+
+}
+
+.opcion-test span{
+
+    line-height:1.5;
+
+}
+
+.aviso-cuestionario,
+.resultado-test,
+.soluciones-test{
+
+    margin-top:24px;
+    padding:20px;
+    border-radius:12px;
+    background:#eff6ff;
+    color:#1e3a8a;
+
+}
+
+.resultado-test h3,
+.soluciones-test h3{
+
+    color:#1d4ed8;
+    margin-bottom:10px;
+
+}
+
+.respuesta-correcta{
+
+    margin-top:16px;
+    padding:16px;
+    border-radius:12px;
+    background:white;
+    border-left:5px solid #2563eb;
+
+}
+
+.respuesta-correcta p{
+
+    margin-top:8px;
+    line-height:1.6;
+
+}
+
+.respuesta-correcta.acierto{
+
+    border-left-color:#16a34a;
+
+}
+
+.respuesta-correcta.fallo{
+
+    border-left-color:#dc2626;
+
+}
+
+@media(max-width:600px){
+
+    .consultoria-box{
+
+        padding:30px 20px;
+
+    }
+
+    .pregunta-test{
+
+        padding:18px 14px;
+
+    }
+
+    .btn-evaluacion{
+
+        width:100%;
+
+    }
+
+}

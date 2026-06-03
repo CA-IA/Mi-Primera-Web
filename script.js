@@ -1,3 +1,5 @@
+let datosEvaluacion = null;
+
 async function generarResumen(){
 
     const norma =
@@ -25,6 +27,9 @@ async function generarResumen(){
 
     resumenTexto.innerHTML =
         "Generando resumen con IA...";
+
+    datosEvaluacion = null;
+    reiniciarCuestionario();
 
     mapaConceptual.innerHTML = "";
     mapaVisual.innerHTML = "";
@@ -110,6 +115,14 @@ async function generarResumen(){
         
         resumenTexto.innerHTML =
             resumen;
+
+        datosEvaluacion = {
+            norma: norma,
+            resumen: resumen,
+            mermaid: mermaidCode
+        };
+
+        reiniciarCuestionario();
         
         document.getElementById("zonaDocumento")
             .style.display = "block";
@@ -392,6 +405,18 @@ window.addEventListener("load", () => {
 
     }
 
+    const btnCuestionario =
+        document.getElementById("btnCuestionario");
+
+    if(btnCuestionario){
+
+        btnCuestionario.addEventListener(
+            "click",
+            mostrarCuestionario
+        );
+
+    }
+
 });
 
 async function generarDocumento(){
@@ -434,4 +459,386 @@ async function generarDocumento(){
 
     document.getElementById("pdfContainer")
         .style.display = "block";
+}
+
+function reiniciarCuestionario(){
+
+    const contenedor =
+        document.getElementById("cuestionarioContainer");
+
+    if(contenedor){
+
+        contenedor.innerHTML = "";
+
+    }
+
+}
+
+function mostrarCuestionario(){
+
+    const contenedor =
+        document.getElementById("cuestionarioContainer");
+
+    if(!datosEvaluacion){
+
+        contenedor.innerHTML =
+            `<div class="aviso-cuestionario">
+                Primero introduce una norma y pulsa "Generar resumen".
+            </div>`;
+
+        return;
+
+    }
+
+    const preguntas =
+        crearPreguntasCuestionario(
+            datosEvaluacion
+        );
+
+    contenedor.innerHTML =
+        construirHTMLCuestionario(
+            preguntas
+        );
+
+    const formulario =
+        document.getElementById("formCuestionario");
+
+    formulario.addEventListener("submit", function(event){
+
+        event.preventDefault();
+        corregirCuestionario(preguntas);
+
+    });
+
+}
+
+function crearPreguntasCuestionario(datos){
+
+    const norma =
+        datos.norma.trim();
+
+    const resumen =
+        limpiarTexto(
+            datos.resumen
+        );
+
+    const conceptos =
+        extraerConceptosMermaid(
+            datos.mermaid
+        );
+
+    const sentencias =
+        resumen
+            .split(/[.!?]\s+/)
+            .map(texto => texto.trim())
+            .filter(texto => texto.length > 35);
+
+    const conceptoPrincipal =
+        conceptos[1] || "sistema de gestion";
+
+    const segundoConcepto =
+        conceptos[2] || "requisitos principales";
+
+    const tercerConcepto =
+        conceptos[3] || "mejora continua";
+
+    const cuartoConcepto =
+        conceptos[4] || "auditoria";
+
+    const quintoConcepto =
+        conceptos[5] || "beneficios";
+
+    const preguntasBase = [
+        {
+            enunciado:`Segun el resumen generado, cual es el tema central de ${norma}?`,
+            opciones:[
+                `La aplicacion de ${norma} en un sistema de gestion`,
+                "La sustitucion completa de las auditorias internas",
+                "La creacion de una campana publicitaria",
+                "La eliminacion de todos los registros documentales"
+            ],
+            correcta:0,
+            explicacion:`${norma} se estudia como una norma de gestion con requisitos, objetivos y beneficios.`
+        },
+        {
+            enunciado:"Que elemento debe revisarse para entender la estructura de la norma?",
+            opciones:[
+                conceptoPrincipal,
+                "El color corporativo de la organizacion",
+                "El nombre comercial del producto",
+                "La ubicacion fisica de las oficinas"
+            ],
+            correcta:0,
+            explicacion:`El mapa conceptual destaca "${conceptoPrincipal}" como parte del contenido relevante.`
+        },
+        {
+            enunciado:"Que idea aparece como contenido relevante para estudiar la norma?",
+            opciones:[
+                segundoConcepto,
+                "Reducir la formacion del personal a cero",
+                "Evitar la revision por la direccion",
+                "Trabajar sin objetivos medibles"
+            ],
+            correcta:0,
+            explicacion:`"${segundoConcepto}" forma parte del material generado para la norma.`
+        },
+        {
+            enunciado:"Que enfoque es mas coherente con una norma de gestion?",
+            opciones:[
+                "Planificar, aplicar, evaluar y mejorar el sistema",
+                "Actuar solo cuando exista una sancion",
+                "Eliminar evidencias para simplificar el trabajo",
+                "Delegar toda la responsabilidad fuera de la organizacion"
+            ],
+            correcta:0,
+            explicacion:"Las normas de gestion se apoyan en control, seguimiento y mejora del sistema."
+        },
+        {
+            enunciado:`En el contexto de ${norma}, que representa mejor un requisito principal?`,
+            opciones:[
+                "Una condicion que la organizacion debe cumplir y demostrar",
+                "Una recomendacion estetica sin impacto operativo",
+                "Una decision opcional sin necesidad de evidencias",
+                "Un mensaje comercial para clientes"
+            ],
+            correcta:0,
+            explicacion:"Los requisitos son condiciones verificables dentro del sistema de gestion."
+        },
+        {
+            enunciado:"Que concepto del mapa conceptual se relaciona con la mejora del desempeno?",
+            opciones:[
+                tercerConcepto,
+                "Improvisacion permanente",
+                "Ausencia de seguimiento",
+                "Trabajo sin indicadores"
+            ],
+            correcta:0,
+            explicacion:`El mapa incluye "${tercerConcepto}" como punto de estudio.`
+        },
+        {
+            enunciado:"Para comprobar si se cumple la norma, que actividad suele ser clave?",
+            opciones:[
+                cuartoConcepto,
+                "Ignorar los resultados",
+                "Cambiar la norma por opiniones personales",
+                "Evitar la participacion del personal"
+            ],
+            correcta:0,
+            explicacion:`"${cuartoConcepto}" aparece como concepto relacionado con la evaluacion del sistema.`
+        },
+        {
+            enunciado:"Que tipo de beneficio se espera normalmente al aplicar una norma de gestion?",
+            opciones:[
+                quintoConcepto,
+                "Menor control de los procesos",
+                "Mas decisiones sin datos",
+                "Desaparicion de responsabilidades"
+            ],
+            correcta:0,
+            explicacion:`El contenido generado senala "${quintoConcepto}" como parte del aprendizaje.`
+        },
+        {
+            enunciado:"Cual de estas opciones describe mejor el uso del resumen generado?",
+            opciones:[
+                "Sirve como base de estudio antes de profundizar en la norma completa",
+                "Sustituye cualquier auditoria real",
+                "Permite certificar una empresa automaticamente",
+                "Evita consultar requisitos y evidencias"
+            ],
+            correcta:0,
+            explicacion:"El resumen ayuda a estudiar, pero no sustituye el analisis completo ni una auditoria."
+        },
+        {
+            enunciado:"Segun el contenido generado, que respuesta demuestra mejor aprendizaje?",
+            opciones:[
+                sentencias[0] || `Identificar el objetivo, requisitos, beneficios y apartados relevantes de ${norma}`,
+                "Memorizar solo el nombre de la norma",
+                "Responder sin relacionar conceptos",
+                "Evitar conectar requisitos con procesos reales"
+            ],
+            correcta:0,
+            explicacion:"La respuesta correcta recoge una idea real del resumen o sus puntos principales."
+        }
+    ];
+
+    return preguntasBase.map(pregunta =>
+        mezclarOpciones(pregunta)
+    );
+
+}
+
+function construirHTMLCuestionario(preguntas){
+
+    const preguntasHTML =
+        preguntas.map((pregunta, indice) => {
+
+            const opcionesHTML =
+                pregunta.opciones.map((opcion, opcionIndice) =>
+                    `<label class="opcion-test">
+                        <input type="radio" name="pregunta-${indice}" value="${opcionIndice}">
+                        <span>${escapeHTML(opcion)}</span>
+                    </label>`
+                ).join("");
+
+            return `
+                <fieldset class="pregunta-test">
+                    <legend>${indice + 1}. ${escapeHTML(pregunta.enunciado)}</legend>
+                    ${opcionesHTML}
+                </fieldset>
+            `;
+
+        }).join("");
+
+    return `
+        <form id="formCuestionario" class="cuestionario">
+            ${preguntasHTML}
+            <button type="submit" class="btn-evaluacion">
+                Corregir cuestionario
+            </button>
+        </form>
+        <div id="resultadoCuestionario"></div>
+    `;
+
+}
+
+function corregirCuestionario(preguntas){
+
+    const resultado =
+        document.getElementById("resultadoCuestionario");
+
+    const respuestas =
+        preguntas.map((pregunta, indice) => {
+
+            const marcada =
+                document.querySelector(
+                    `input[name="pregunta-${indice}"]:checked`
+                );
+
+            return marcada ? Number(marcada.value) : null;
+
+        });
+
+    if(respuestas.includes(null)){
+
+        resultado.innerHTML =
+            `<div class="aviso-cuestionario">
+                Responde las 10 preguntas antes de corregir.
+            </div>`;
+
+        return;
+
+    }
+
+    const aciertos =
+        respuestas.filter((respuesta, indice) =>
+            respuesta === preguntas[indice].correcta
+        ).length;
+
+    const detalle =
+        preguntas.map((pregunta, indice) => {
+
+            const acertada =
+                respuestas[indice] === pregunta.correcta;
+
+            return `
+                <div class="respuesta-correcta ${acertada ? "acierto" : "fallo"}">
+                    <strong>${indice + 1}. ${acertada ? "Correcta" : "Incorrecta"}</strong>
+                    <p>Respuesta correcta: ${escapeHTML(pregunta.opciones[pregunta.correcta])}</p>
+                    <p>${escapeHTML(pregunta.explicacion)}</p>
+                </div>
+            `;
+
+        }).join("");
+
+    resultado.innerHTML =
+        `<div class="resultado-test">
+            <h3>Resultado: ${aciertos}/10</h3>
+            <p>${obtenerMensajeResultado(aciertos)}</p>
+        </div>
+        <div class="soluciones-test">
+            <h3>Respuestas correctas</h3>
+            ${detalle}
+        </div>`;
+
+}
+
+function obtenerMensajeResultado(aciertos){
+
+    if(aciertos >= 8){
+
+        return "Muy buen dominio del contenido generado.";
+
+    }
+
+    if(aciertos >= 5){
+
+        return "Buen avance. Revisa las respuestas marcadas para reforzar conceptos.";
+
+    }
+
+    return "Conviene repasar el resumen y el mapa conceptual antes de repetir el test.";
+
+}
+
+function extraerConceptosMermaid(mermaid){
+
+    const coincidencias =
+        [...mermaid.matchAll(/\[([^\]]+)\]/g)]
+            .map(coincidencia =>
+                limpiarTexto(coincidencia[1])
+            )
+            .filter(Boolean);
+
+    return [...new Set(coincidencias)]
+        .filter(texto => texto.length > 2)
+        .slice(0, 12);
+
+}
+
+function mezclarOpciones(pregunta){
+
+    const opciones =
+        pregunta.opciones.map((opcion, indice) => ({
+            texto: opcion,
+            original: indice
+        }));
+
+    for(let i = opciones.length - 1; i > 0; i--){
+
+        const j =
+            Math.floor(Math.random() * (i + 1));
+
+        [opciones[i], opciones[j]] =
+            [opciones[j], opciones[i]];
+
+    }
+
+    return {
+        enunciado: pregunta.enunciado,
+        opciones: opciones.map(opcion => opcion.texto),
+        correcta: opciones.findIndex(opcion =>
+            opcion.original === pregunta.correcta
+        ),
+        explicacion: pregunta.explicacion
+    };
+
+}
+
+function limpiarTexto(texto){
+
+    return texto
+        .replace(/\s+/g, " ")
+        .trim();
+
+}
+
+function escapeHTML(texto){
+
+    return String(texto)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+
 }
