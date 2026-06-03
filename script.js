@@ -178,6 +178,24 @@ async function generarResumen(){
 
                 pdf.addPage();
 
+                pdf.setFontSize(10);
+
+                pdf.setTextColor(120);
+
+                pdf.text(
+                    "IA para QA",
+                    15,
+                    10
+                );
+
+                pdf.text(
+                    nombreNorma,
+                    150,
+                    10
+                );
+
+                pdf.setTextColor(0);
+
                 /*
                 DOCUMENTO
                 */
