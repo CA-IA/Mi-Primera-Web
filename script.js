@@ -204,9 +204,15 @@ async function generarResumen(){
 
                 pdf.setFontSize(12);
 
+                const textoLimpio =
+                    window.documentoCompleto
+                        .replace(/^### /gm, "")
+                        .replace(/^## /gm, "")
+                        .replace(/^# /gm, "");
+
                 const lineas =
                     pdf.splitTextToSize(
-                        window.documentoCompleto,
+                        textoLimpio,
                         180
                     );
 

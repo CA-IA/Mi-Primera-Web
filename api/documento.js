@@ -17,6 +17,10 @@ Eres experto en normas ISO.
 
 Genera un documento técnico completo sobre ${norma}.
 
+No utilices Markdown.
+No utilices símbolos #, ## o ###.
+Escribe títulos y subtítulos en texto normal.
+
 Incluye:
 
 - Introducción
