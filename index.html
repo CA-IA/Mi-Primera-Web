@@ -40,6 +40,10 @@
 					Evaluación
 				</a>
 
+				<a href="#documentacion" class="btn-secondary">
+					Documentación
+				</a>
+
 			</div>
 
 		</div>
@@ -151,6 +155,48 @@
     </div>
 
 </section>
+
+	<!-- DOCUMENTACIÓN -->
+
+	<section id="documentacion" class="section">
+
+		<h2>Documentación</h2>
+
+		<div class="documentacion-box">
+
+			<div class="documentacion-form">
+
+				<input
+					type="text"
+					id="normaProcedimientoInput"
+					placeholder="Norma. Ejemplo: ISO 9001"
+				>
+
+				<input
+					type="text"
+					id="tematicaProcedimientoInput"
+					placeholder="Temática. Ejemplo: control de no conformidades"
+				>
+
+				<button id="btnGenerarProcedimiento">
+					Generar procedimiento
+				</button>
+
+			</div>
+
+			<div id="resultadoProcedimiento" class="resultado-procedimiento"></div>
+
+			<div id="procedimientoBotones" class="documento-botones" style="display:none;">
+
+				<button id="btnAbrirProcedimiento">
+					Abrir procedimiento
+				</button>
+
+			</div>
+
+		</div>
+
+	</section>
 
 	<!-- EVALUACIÓN -->
 

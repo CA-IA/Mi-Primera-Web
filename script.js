@@ -1,4 +1,5 @@
 let datosEvaluacion = null;
+let procedimientoGenerado = "";
 
 async function generarResumen(){
 
@@ -415,6 +416,30 @@ window.addEventListener("load", () => {
         btnCuestionario.addEventListener(
             "click",
             mostrarCuestionario
+        );
+
+    }
+
+    const btnGenerarProcedimiento =
+        document.getElementById("btnGenerarProcedimiento");
+
+    if(btnGenerarProcedimiento){
+
+        btnGenerarProcedimiento.addEventListener(
+            "click",
+            generarProcedimiento
+        );
+
+    }
+
+    const btnAbrirProcedimiento =
+        document.getElementById("btnAbrirProcedimiento");
+
+    if(btnAbrirProcedimiento){
+
+        btnAbrirProcedimiento.addEventListener(
+            "click",
+            abrirProcedimientoPDF
         );
 
     }
@@ -1082,6 +1107,225 @@ function escaparRegExp(texto){
 
     return String(texto)
         .replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
+}
+
+async function generarProcedimiento(){
+
+    const norma =
+        document.getElementById("normaProcedimientoInput").value.trim();
+
+    const tematica =
+        document.getElementById("tematicaProcedimientoInput").value.trim();
+
+    const resultado =
+        document.getElementById("resultadoProcedimiento");
+
+    const botones =
+        document.getElementById("procedimientoBotones");
+
+    const boton =
+        document.getElementById("btnGenerarProcedimiento");
+
+    if(!norma || !tematica){
+
+        resultado.innerHTML =
+            "Introduce una norma y una temática.";
+
+        botones.style.display =
+            "none";
+
+        return;
+
+    }
+
+    procedimientoGenerado = "";
+
+    resultado.innerHTML =
+        "Generando procedimiento con IA...";
+
+    botones.style.display =
+        "none";
+
+    boton.disabled =
+        true;
+
+    boton.innerHTML =
+        "Generando procedimiento...";
+
+    try{
+
+        const respuesta = await fetch(
+            "/api/procedimiento",
+            {
+                method:"POST",
+
+                headers:{
+                    "Content-Type":"application/json"
+                },
+
+                body:JSON.stringify({
+                    norma:norma,
+                    tematica:tematica
+                })
+            }
+        );
+
+        const datos =
+            await respuesta.json();
+
+        if(!respuesta.ok){
+
+            throw new Error(
+                datos.error || "Error al generar el procedimiento"
+            );
+
+        }
+
+        procedimientoGenerado =
+            datos.procedimiento;
+
+        resultado.innerHTML =
+            "Procedimiento generado correctamente.";
+
+        botones.style.display =
+            "flex";
+
+    }
+    catch(error){
+
+        console.error(error);
+
+        resultado.innerHTML =
+            error.message;
+
+    }
+    finally{
+
+        boton.disabled =
+            false;
+
+        boton.innerHTML =
+            "Generar procedimiento";
+
+    }
+
+}
+
+function abrirProcedimientoPDF(){
+
+    if(!procedimientoGenerado){
+
+        alert(
+            "Primero debes generar el procedimiento."
+        );
+
+        return;
+
+    }
+
+    const norma =
+        document.getElementById("normaProcedimientoInput").value.trim();
+
+    const tematica =
+        document.getElementById("tematicaProcedimientoInput").value.trim();
+
+    const { jsPDF } =
+        window.jspdf;
+
+    const pdf =
+        new jsPDF();
+
+    const fecha =
+        new Date().toLocaleDateString("es-ES");
+
+    pdf.setFontSize(22);
+    pdf.setTextColor(29,78,216);
+
+    pdf.text(
+        "Procedimiento",
+        105,
+        35,
+        { align:"center" }
+    );
+
+    pdf.setFontSize(14);
+    pdf.setTextColor(30);
+
+    pdf.text(
+        norma,
+        105,
+        50,
+        { align:"center" }
+    );
+
+    pdf.text(
+        tematica,
+        105,
+        62,
+        { align:"center" }
+    );
+
+    pdf.setFontSize(10);
+    pdf.setTextColor(100);
+
+    pdf.text(
+        `Generado por IA para QA · ${fecha}`,
+        105,
+        76,
+        { align:"center" }
+    );
+
+    pdf.addPage();
+
+    pdf.setFontSize(12);
+    pdf.setTextColor(0);
+
+    const lineas =
+        pdf.splitTextToSize(
+            procedimientoGenerado,
+            180
+        );
+
+    let y = 20;
+    let pagina = 2;
+
+    lineas.forEach(linea => {
+
+        if(y > 270){
+
+            pdf.setFontSize(10);
+            pdf.text(
+                `Página ${pagina}`,
+                180,
+                290
+            );
+
+            pdf.addPage();
+            pagina++;
+            y = 20;
+            pdf.setFontSize(12);
+
+        }
+
+        pdf.text(
+            linea,
+            15,
+            y
+        );
+
+        y += 7;
+
+    });
+
+    pdf.setFontSize(10);
+    pdf.text(
+        `Página ${pagina}`,
+        180,
+        290
+    );
+
+    pdf.output("dataurlnewwindow");
 
 }
 
