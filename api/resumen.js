@@ -1,3 +1,5 @@
+import { generarContenidoGemini } from './gemini.js';
+
 export default async function handler(req, res) {
 
     try {
@@ -75,38 +77,9 @@ A[Norma]
 A --> B[Capítulo]
 `;
 
-        const respuesta = await fetch(
-            `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${process.env.GEMINI_API_KEY}`,
-            {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    contents: [
-                        {
-                            parts: [
-                                {
-                                    text: prompt
-                                }
-                            ]
-                        }
-                    ]
-                })
-            }
-        );
+        const datos = await generarContenidoGemini(prompt);
 
-        const datos = await respuesta.json();
-
-        console.log(JSON.stringify(datos, null, 2));
-
-        if (datos.error) {
-
-            return res.status(500).json({
-                error: datos.error.message
-            });
-
-        }
+        console.log("RESPUESTA GEMINI:", JSON.stringify(datos, null, 2));
 
         const texto =
             datos.candidates?.[0]?.content?.parts?.[0]?.text;
